@@ -11,7 +11,7 @@ import SwiftUI
 struct BudgetsAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environment(\.managedObjectContext,CoreDataManager.shared.viewContext)
         }
     }
 }

@@ -3,6 +3,6 @@
     <entity name="BudgetCategory" representedClassName="BudgetCategory" syncable="YES" codeGenerationType="category">
         <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <attribute name="total" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="total" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
 </model>
