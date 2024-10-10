@@ -11,6 +11,7 @@ struct AddBugetCategoryView: View {
     @State private var title:String = ""
     @State private var total:Double = 0
     @State private var messages :[String] = []
+    @Environment(\.dismiss) private var dismiss
     
     
     @Environment(\.managedObjectContext) private var viewContext
@@ -34,6 +35,7 @@ struct AddBugetCategoryView: View {
         
         do{
             try viewContext.save()
+            dismiss()
         } catch {
             print(error.localizedDescription)
         }
@@ -60,7 +62,7 @@ struct AddBugetCategoryView: View {
             }.toolbar{
                 ToolbarItem(placement: .navigationBarLeading){
                     Button("Cancel"){
-                        
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing){

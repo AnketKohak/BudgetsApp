@@ -11,9 +11,19 @@ struct ContentView: View {
     @State var isPresented:Bool = false
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: []) private var budgetCategoryResults:FetchedResults<BudgetCategory>
+    
     var total: Double {
         budgetCategoryResults.reduce(0) { result, budgetCategory in
             return result + budgetCategory.total
+        }
+    }
+    private func deleteBudgetCategory(budgetCategory:BudgetCategory){
+        viewContext.delete(budgetCategory)
+        do{
+            try viewContext.save()
+        }catch{
+            print(error)
+            
         }
     }
     var body: some View {
@@ -22,16 +32,9 @@ struct ContentView: View {
                 Text(total as NSNumber, formatter: NumberFormatter.currency)
                     .fontWeight(.bold)
                 
-                BudgetListView(budgetCategoryResults: budgetCategoryResults, onDeleteBudgetCategory: {
-                    budgetCategory in
-                    viewContext.delete(budgetCategory)
-                    do{
-                        try viewContext.save()
-                    }catch{
-                        print(error)
-                        
-                    }
-                })
+                BudgetListView(budgetCategoryResults: budgetCategoryResults, onDeleteBudgetCategory: deleteBudgetCategory)
+                
+                
             }.sheet(isPresented: $isPresented, content: {
                 AddBugetCategoryView()
             })
@@ -46,7 +49,8 @@ struct ContentView: View {
         }
     }
 }
-
-#Preview {
-    ContentView()
-}
+    
+    
+    #Preview {
+        ContentView().environment(\.managedObjectContext,CoreDataManager.shared.viewContext)
+    }
