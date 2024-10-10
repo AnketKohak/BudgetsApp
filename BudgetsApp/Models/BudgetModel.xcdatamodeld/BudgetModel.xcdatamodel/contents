@@ -4,5 +4,12 @@
         <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <attribute name="total" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="trascation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transcation" inverseName="category" inverseEntity="Transcation"/>
+    </entity>
+    <entity name="Transcation" representedClassName="Transcation" syncable="YES" codeGenerationType="category">
+        <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="total" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetCategory" inverseName="trascation" inverseEntity="BudgetCategory"/>
     </entity>
 </model>
