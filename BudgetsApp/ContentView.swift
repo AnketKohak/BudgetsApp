@@ -10,15 +10,19 @@ import SwiftUI
 struct ContentView: View {
     @State var isPresented:Bool = false
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [])
-    private var budgetCategoryResult:FetchedResults<BudgetCategory>
+    @FetchRequest(sortDescriptors: []) private var budgetCategoryResults:FetchedResults<BudgetCategory>
+    var total: Double {
+        budgetCategoryResults.reduce(0) { result, budgetCategory in
+            return result + budgetCategory.total
+        }
+    }
     var body: some View {
         NavigationStack{
             VStack {
-                List(budgetCategoryResult){ budgetCategory in Text(budgetCategory.title ?? "")
-                    
-                }
-                Text("Hello world ")
+                Text(total as NSNumber, formatter: NumberFormatter.currency)
+                    .fontWeight(.bold)
+
+                BudgetListView(budgetCategoryResults: budgetCategoryResults)
             }.sheet(isPresented: $isPresented, content: {
                 AddBugetCategoryView()
             })
