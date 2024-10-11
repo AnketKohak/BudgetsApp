@@ -7,7 +7,7 @@
 
 import Foundation
 import CoreData
-
+@objc(Transaction)
 public class Transaction:NSManagedObject{
     
     public override func awakeFromInsert() {
