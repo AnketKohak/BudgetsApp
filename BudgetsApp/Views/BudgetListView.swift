@@ -19,8 +19,13 @@ struct BudgetListView: View {
                         HStack{
                             Text(budgetCategory.title ?? "")
                             Spacer()
-                            VStack{
+                            VStack(alignment: .trailing, spacing: 10){
                                 Text(budgetCategory.total as NSNumber, formatter: NumberFormatter.currency)
+                        
+                                Text("\(budgetCategory.overSpent ? "Overspent":"Reamining")\(Text(budgetCategory.remaninigBudgetTotal as NSNumber, formatter: NumberFormatter.currency))")
+                                    .frame(maxWidth :.infinity,alignment: .trailing)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(budgetCategory.overSpent ? .red : .green)
                             }
                         }
                     }
@@ -33,7 +38,8 @@ struct BudgetListView: View {
                 Text("No Budget categories Exsit")
             }
             
-        }.navigationDestination(for: BudgetCategory.self){budgetCategory in
+        }.listStyle(.plain)
+        .navigationDestination(for: BudgetCategory.self){budgetCategory in
             BudgetDetailView(budgetCategory: budgetCategory)
         }
     }

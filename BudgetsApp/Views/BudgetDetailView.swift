@@ -58,6 +58,8 @@ struct BudgetDetailView: View {
                     Spacer()
                 }
             }
+            BudgetSummaryView(budgetCategory: budgetCategory)
+            
             TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory))
             Spacer()
             
