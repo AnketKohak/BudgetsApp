@@ -53,15 +53,15 @@ struct BudgetDetailView: View {
                 HStack{
                     Spacer()
                     Button("Save Trasnaction"){
-                        
+                        saveTransaction()
                     }.disabled(!isFormVaild)
                     Spacer()
                 }
             }
-            
+            TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory))
             Spacer()
             
-        }
+        }.padding()
     }
 }
 
