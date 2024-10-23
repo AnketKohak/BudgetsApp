@@ -17,6 +17,15 @@ struct BudgetDetailView: View {
         return !title.isEmpty && !total.isEmpty && totalAsDouble > 0
         
     }
+    private func onDeleteTrasaction(_ transaction:Transaction){
+        viewContext.delete(transaction)
+        do{
+            try viewContext.save()
+        }
+        catch{
+            print(error)
+        }
+    }
     func saveTransaction(){
         do{
             let transaction = Transaction(context: viewContext)
@@ -60,7 +69,7 @@ struct BudgetDetailView: View {
             }
             BudgetSummaryView(budgetCategory: budgetCategory)
             
-            TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory))
+            TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory),onDeleteTransaction: onDeleteTrasaction)
             Spacer()
             
         }.padding()
