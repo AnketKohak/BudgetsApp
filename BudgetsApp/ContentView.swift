@@ -2,11 +2,12 @@
 //  ContentView.swift
 //  BudgetsApp
 //
-//  Created by Anket Kohak on 07/10/24.
+//  Created by Mohammad Azam on 9/14/22.
 //
 
 import SwiftUI
 import CoreData
+
 
 enum SheetAction: Identifiable {
     
@@ -23,61 +24,65 @@ enum SheetAction: Identifiable {
     }
     
 }
-struct ContentView: View {
-    @State var isPresented:Bool = false
-    @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: []) private var budgetCategoryResults:FetchedResults<BudgetCategory>
-    @State private var sheetAction: SheetAction?
 
+struct ContentView: View {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(sortDescriptors: []) private var budgetCategoryResults: FetchedResults<BudgetCategory>
+    @State private var sheetAction: SheetAction?
     
     var total: Double {
         budgetCategoryResults.reduce(0) { result, budgetCategory in
             return result + budgetCategory.total
         }
     }
-    private func deleteBudgetCategory(budgetCategory:BudgetCategory){
+    
+    private func deleteBudgetCategory(budgetCategory: BudgetCategory) {
+        
         viewContext.delete(budgetCategory)
-        do{
+        do {
             try viewContext.save()
-        }catch{
+        } catch {
             print(error)
-            
         }
     }
-    private func editBudgetCategory(budgetCategory:BudgetCategory){
+    
+    private func editBudgetCategory(budgetCategory: BudgetCategory) {
         sheetAction = .edit(budgetCategory)
     }
+    
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack {
+                
                 Text(total as NSNumber, formatter: NumberFormatter.currency)
                     .fontWeight(.bold)
                 
                 BudgetListView(budgetCategoryResults: budgetCategoryResults, onDeleteBudgetCategory: deleteBudgetCategory, onEditBudgetCategory: editBudgetCategory)
-                
-                
-            }.sheet(item: $sheetAction, content: { sheetAction in
+            }
+            .sheet(item: $sheetAction, content: { sheetAction in
                 // display the sheet
                 switch sheetAction {
                     case .add:
-                        AddBugetCategoryView()
-                    case .edit(_):
-                        AddBugetCategoryView()
+                        AddBudgetCategoryView()
+                    case .edit(let budgetCategory):
+                        AddBudgetCategoryView(budgetCategory: budgetCategory)
                 }
             })
-            .toolbar{
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button("Add Category"){
-                        isPresented = true
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add Category") {
+                        sheetAction = .add
                     }
                 }
             }.padding()
-            
         }
+       
     }
 }
-    
-    
-    #Preview {
-        ContentView().environment(\.managedObjectContext,CoreDataManager.shared.viewContext)
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView().environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
     }
+}
