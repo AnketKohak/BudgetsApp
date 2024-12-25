@@ -36,6 +36,8 @@ struct BudgetDetailView: View {
         }catch{
             print(error)
         }
+        title = ""
+        total = ""
         
     }
     let budgetCategory: BudgetCategory
@@ -63,13 +65,17 @@ struct BudgetDetailView: View {
                     Spacer()
                     Button("Save Trasnaction"){
                         saveTransaction()
+                        
                     }.disabled(!isFormVaild)
                     Spacer()
                 }
+            }.frame(maxHeight: .infinity)
+                .padding([.bottom],20)
+            VStack{
+                BudgetSummaryView(budgetCategory: budgetCategory)
+                
+                TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory),onDeleteTransaction: onDeleteTrasaction)
             }
-            BudgetSummaryView(budgetCategory: budgetCategory)
-            
-            TransacationListView(request: BudgetCategory.transactionByCategoryRequest(budgetCategory),onDeleteTransaction: onDeleteTrasaction)
             Spacer()
             
         }.padding()

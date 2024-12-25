@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  BudgetsApp
 //
-//  Created by Mohammad Azam on 9/14/22.
+//  Created by Anket Kohak on 10/10/24.
 //
 
 import SwiftUI
@@ -28,10 +28,11 @@ enum SheetAction: Identifiable {
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: []) private var budgetCategoryResults: FetchedResults<BudgetCategory>
+//    @FetchRequest(sortDescriptors: []) private var budgetCategoryResults: FetchedResults<BudgetCategory>
+    @FetchRequest(fetchRequest: BudgetCategory.all) var budgetCategoryResults
     @State private var sheetAction: SheetAction?
     
-    var total: Double {
+    var total: Double { 
         budgetCategoryResults.reduce(0) { result, budgetCategory in
             return result + budgetCategory.total
         }
@@ -54,9 +55,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                
-                Text(total as NSNumber, formatter: NumberFormatter.currency)
-                    .fontWeight(.bold)
+                HStack{
+                    Text("Total:")
+                    Text(total as NSNumber, formatter: NumberFormatter.currency)
+                        .fontWeight(.bold)
+                }
                 
                 BudgetListView(budgetCategoryResults: budgetCategoryResults, onDeleteBudgetCategory: deleteBudgetCategory, onEditBudgetCategory: editBudgetCategory)
             }
